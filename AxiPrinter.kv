@@ -1,0 +1,79 @@
+#:kivy 1.1.0
+
+Root:
+
+    BoxLayout:
+        orientation: 'horizontal'
+        BoxLayout:
+            orientation: 'vertical'
+            width: 50
+            Label:
+                text: 'Pen Up'
+                size_hint: (None, None)
+                # size: dp(50), dp(30)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            Slider:
+                min: 0
+                max: 100
+                value: 50
+                orientation: 'vertical'
+
+        BoxLayout:
+            orientation: 'vertical'
+            width: 50
+            Label:
+                text: 'Pen Down'
+                size_hint: (None, None)
+                # size: dp(50), dp(30)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            Slider:
+                min: 0
+                max: 100
+                value: 50
+                orientation: 'vertical'
+
+        BoxLayout:
+            orientation: 'vertical'
+            BoxLayout:
+                size_hint_y: None
+                Button:
+                    text: 'Print'
+                    on_release: root.show_load()
+                
+
+
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+
+            Button:
+                text: 'Icon View'
+                on_press: filechooser.view_mode = 'icon'
+            Button:
+                text: 'List View'
+                on_press: filechooser.view_mode = 'list'
+
+        FileChooser:
+            id: filechooser
+            path: "~"
+            filters: ["*.svg", "*.SVG"]
+            on_submit: root.load(filechooser.selection)
+            FileChooserListLayout
+            FileChooserIconLayout
+
+        BoxLayout:
+            size_hint_y: None
+            # height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Print"
+                on_release: root.load(filechooser.selection)
