@@ -1,46 +1,55 @@
 #:kivy 1.1.0
 
 Root:
-
     BoxLayout:
         orientation: 'horizontal'
         BoxLayout:
             orientation: 'vertical'
-            width: 50
-            Label:
-                text: 'Pen Up'
-                size_hint: (None, None)
-                # size: dp(50), dp(30)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            Slider:
-                min: 0
-                max: 100
-                value: 50
-                orientation: 'vertical'
-
-        BoxLayout:
-            orientation: 'vertical'
-            width: 50
             Label:
                 text: 'Pen Down'
                 size_hint: (None, None)
-                # size: dp(50), dp(30)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            Slider:
+            ModifiedSlider:
+                id: pen_down_slider
                 min: 0
                 max: 100
-                value: 50
+                value: 30
                 orientation: 'vertical'
+                on_release:
+                    app.ad.options.pen_pos_down = pen_down_slider.value 
+                    app.ad.penup()
+                    app.ad.pendown()
+                    print("Down pen position", app.ad.options.pen_pos_down)
 
         BoxLayout:
             orientation: 'vertical'
-            BoxLayout:
-                size_hint_y: None
-                Button:
-                    text: 'Print'
-                    on_release: root.show_load()
-                
+            Label:
+                text: 'Pen Up'
+                size_hint: (None, None)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            ModifiedSlider:
+                id: pen_up_slider
+                min: 0
+                max: 100
+                value: 60
+                orientation: 'vertical'
+                on_release:
+                    app.ad.options.pen_pos_up = pen_up_slider.value 
+                    app.ad.pendown()
+                    app.ad.penup()
+                    print("Up pen position", app.ad.options.pen_pos_up)
 
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: dp(2)
+
+            Button:
+                text: "Go Home"
+                on_release: root.go_home()
+
+            Button:
+                text: 'Print File'
+                on_release: root.show_load()
 
 <LoadDialog>:
     BoxLayout:
