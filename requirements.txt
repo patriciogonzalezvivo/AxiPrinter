@@ -1,2 +1,4 @@
 lxml==4.2.5
 pyserial==3.0
+Cython==0.28.2
+kivy

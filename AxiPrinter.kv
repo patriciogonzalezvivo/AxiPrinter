@@ -16,10 +16,13 @@ Root:
                 value: 30
                 orientation: 'vertical'
                 on_release:
+                    app.ad.connect()
                     app.ad.options.pen_pos_down = pen_down_slider.value 
+                    app.ad.update()
                     app.ad.penup()
                     app.ad.pendown()
-                    print("Down pen position", app.ad.options.pen_pos_down)
+                    app.ad.disconnect()
+                    print("Down/Up pen position", app.ad.options.pen_pos_down, app.ad.options.pen_pos_up)
 
         BoxLayout:
             orientation: 'vertical'
@@ -34,10 +37,13 @@ Root:
                 value: 60
                 orientation: 'vertical'
                 on_release:
-                    app.ad.options.pen_pos_up = pen_up_slider.value 
+                    app.ad.connect()
+                    app.ad.options.pen_pos_up = pen_up_slider.value
+                    app.ad.update()
                     app.ad.pendown()
                     app.ad.penup()
-                    print("Up pen position", app.ad.options.pen_pos_up)
+                    app.ad.disconnect()
+                    print("Up pen position", app.ad.options.pen_pos_down, app.ad.options.pen_pos_up)
 
         BoxLayout:
             orientation: 'vertical'
@@ -45,11 +51,20 @@ Root:
 
             Button:
                 text: "Go Home"
-                on_release: root.go_home()
+                on_release:
+                    app.ad.connect()
+                    app.ad.mode = "resume"
+                    app.ad.options.resume_mode = "home"
+                    app.ad.options.units = 0
+                    app.ad.update()
+                    app.ad.penup()
+                    app.ad.moveto(0,0)
+                    app.ad.disconnect()
 
             Button:
                 text: 'Print File'
                 on_release: root.show_load()
+
 
 <LoadDialog>:
     BoxLayout:
