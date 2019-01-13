@@ -8,10 +8,12 @@ from __future__ import unicode_literals
 
 import os
 
+import kivy
+kivy.require('1.0.7')
+
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
-from kivy.factory import Factory
 from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 from kivy.uix.slider import Slider
@@ -76,10 +78,9 @@ class Root(FloatLayout):
 class AxiPrinter(App):
     ad = axidraw.AxiDraw() 
 
-
     def build(self):
         self.ad.interactive()
-        print("Interactive")
+        return Builder.load_file('AxiPrinter.kv') 
 
 
 if __name__ == '__main__':
