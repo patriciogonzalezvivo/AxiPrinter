@@ -53,7 +53,6 @@ class Root(FloatLayout):
         
 
     def load(self, filename):
-        
         print('Loading', filename[0])
 
         app = App.get_running_app()
@@ -73,6 +72,31 @@ class Root(FloatLayout):
         # writeFile.close()
 
         self.dismiss_popup()
+
+    def goCoorner(self, coorner):
+        app = App.get_running_app()
+
+        min_height = app.ad.options.pen_pos_down
+        max_height = app.ad.options.pen_pos_up
+
+        app.ad.options.model = 2
+        app.ad.options.units = 0
+        app.ad.options.pen_pos_down = min_height
+        app.ad.options.pen_pos_up = max_height
+        app.ad.update()
+        app.ad.penup()
+
+        if coorner == 0:
+            ad.goto(app.ad.x_bounds_min, app.ad.y_bounds_min)
+        elif coorner == 1:
+            ad.goto(app.ad.x_bounds_max, app.ad.y_bounds_min)
+        elif coorner == 2:
+            ad.goto(app.ad.x_bounds_min, app.ad.y_bounds_max)
+        elif coorner == 3:
+            ad.goto(app.ad.x_bounds_max, app.ad.y_bounds_max)
+
+        app.ad.pendown()
+
 
 
 class AxiPrinter(App):

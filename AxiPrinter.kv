@@ -49,20 +49,35 @@ Root:
             orientation: 'vertical'
             size_hint_x: dp(2)
 
-            Button:
-                text: "Go Home"
-                on_release:
-                    app.ad.connect()
-                    app.ad.mode = "resume"
-                    app.ad.options.resume_mode = "home"
-                    app.ad.options.units = 0
-                    app.ad.update()
-                    app.ad.penup()
-                    app.ad.moveto(0,0)
-                    app.ad.disconnect()
+            Label:
+                text: 'Calibrate'
+                size_hint: (None, None)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            BoxLayout:
+                orientation: 'horizontal'
+                BoxLayout:
+                    orientation: 'vertical'
+                    Button:
+                        text: "0"
+                        on_release: root.goCoorner(0)
+                    Button:
+                        text: "2"
+                        on_release: root.goCoorner(2)
+                BoxLayout:
+                    orientation: 'vertical'
+                    Button:
+                        text: "1"
+                        on_release: root.goCoorner(1)
+                    Button:
+                        text: "3"
+                        on_release: root.goCoorner(3)
 
+            Label:
+                text: 'Print'
+                size_hint: (None, None)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             Button:
-                text: 'Print File'
+                text: 'Choose File'
                 on_release: root.show_load()
 
 
@@ -85,12 +100,12 @@ Root:
 
         FileChooser:
             id: filechooser
-            path: "~"
+            path: "/media"
             filters: ["*.svg", "*.SVG"]
             on_submit: root.load(filechooser.selection)
-            FileChooserListLayout
             FileChooserIconLayout
-
+            FileChooserListLayout
+            
         BoxLayout:
             size_hint_y: None
             # height: 30
