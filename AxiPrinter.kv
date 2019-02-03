@@ -1,56 +1,57 @@
 #:kivy 1.0
-
 Root:
     BoxLayout:
         orientation: 'horizontal'
         BoxLayout:
-            orientation: 'vertical'
-            Label:
-                text: 'Pen Down'
-                size_hint: (None, None)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            ModifiedSlider:
-                id: pen_down_slider
-                min: 0
-                max: 100
-                value: 30
+            orientation: 'horizontal'
+            BoxLayout:
                 orientation: 'vertical'
-                on_release:
-                    app.ad.connect()
-                    app.ad.options.pen_pos_down = pen_down_slider.value 
-                    app.ad.update()
-                    app.ad.penup()
-                    app.ad.pendown()
-                    app.ad.disconnect()
-                    print("Down/Up pen position", app.ad.options.pen_pos_down, app.ad.options.pen_pos_up)
+                Label:
+                    text: 'Pen Down'
+                    size_hint: (None, None)
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                MySlider:
+                    id: pen_down_slider
+                    min: 0
+                    max: 100
+                    value: 30
+                    orientation: 'vertical'
+                    on_release:
+                        app.ad.connect()
+                        app.ad.options.pen_pos_down = pen_down_slider.value 
+                        app.ad.update()
+                        app.ad.penup()
+                        app.ad.pendown()
+                        app.ad.disconnect()
+                        print("Down/Up pen position", app.ad.options.pen_pos_down, app.ad.options.pen_pos_up)
 
-        BoxLayout:
-            orientation: 'vertical'
-            Label:
-                text: 'Pen Up'
-                size_hint: (None, None)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            ModifiedSlider:
-                id: pen_up_slider
-                min: 0
-                max: 100
-                value: 60
+            BoxLayout:
                 orientation: 'vertical'
-                on_release:
-                    app.ad.connect()
-                    app.ad.options.pen_pos_up = pen_up_slider.value
-                    app.ad.update()
-                    app.ad.pendown()
-                    app.ad.penup()
-                    app.ad.disconnect()
-                    print("Up pen position", app.ad.options.pen_pos_down, app.ad.options.pen_pos_up)
+                Label:
+                    text: 'Pen Up'
+                    size_hint: (None, None)
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                MySlider:
+                    id: pen_up_slider
+                    min: 0
+                    max: 100
+                    value: 60
+                    orientation: 'vertical'
+                    on_release:
+                        app.ad.connect()
+                        app.ad.options.pen_pos_up = pen_up_slider.value
+                        app.ad.update()
+                        app.ad.pendown()
+                        app.ad.penup()
+                        app.ad.disconnect()
+                        print("Up pen position", app.ad.options.pen_pos_down, app.ad.options.pen_pos_up)
 
         BoxLayout:
             orientation: 'vertical'
             size_hint_x: dp(2)
 
             Label:
-                text: 'Calibrate'
+                text: 'Print Area Coorners'
                 size_hint: (None, None)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             BoxLayout:
@@ -73,13 +74,25 @@ Root:
                         on_release: root.goCoorner(3)
 
             Label:
-                text: 'Print'
+                text: 'FILE'
                 size_hint: (None, None)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
             Button:
-                text: 'Choose File'
+                text: 'Choose...'
                 on_release: root.show_load()
 
+            MyButton:
+                id: flyover_button
+                text: 'FlyOver B-Box'
+                enabled: False
+                on_release: root.flyover()
+
+            MyButton:
+                id: plot_button
+                text: 'PLOT'
+                enabled: False
+                on_release: root.plot()
 
 <LoadDialog>:
     BoxLayout:
@@ -100,7 +113,7 @@ Root:
 
         FileChooser:
             id: filechooser
-            path: "/media"
+            path: ".."
             filters: ["*.svg", "*.SVG"]
             on_submit: root.load(filechooser.selection)
             FileChooserIconLayout
@@ -108,11 +121,10 @@ Root:
             
         BoxLayout:
             size_hint_y: None
-            # height: 30
             Button:
                 text: "Cancel"
                 on_release: root.cancel()
 
             Button:
-                text: "Print"
+                text: "Load"
                 on_release: root.load(filechooser.selection)
