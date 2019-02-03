@@ -50,18 +50,15 @@ Root:
             orientation: 'vertical'
             size_hint_x: dp(2)
 
-            Label:
-                text: 'MOVE'
-                size_hint: (None, None)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
             BoxLayout:
                 orientation: 'horizontal'
+                size_hint_y: dp(2)
 
                 BoxLayout:
                     orientation: 'vertical'
                     Label:
-                        text: 'to coorners'
+                        text: 'Coorners'
                         size_hint: (None, None)
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                     BoxLayout:
@@ -160,7 +157,7 @@ Root:
 
         FileChooser:
             id: filechooser
-            path: ".."
+            path: "/media"
             filters: ["*.svg", "*.SVG"]
             on_submit: root.load(filechooser.selection)
             FileChooserIconLayout

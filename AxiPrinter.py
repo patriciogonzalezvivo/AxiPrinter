@@ -67,6 +67,7 @@ class Root(FloatLayout):
     #  go to absoluite coorners
     def goCoorner(self, coorner):
         app = App.get_running_app()
+        app.ad.connect()
         app.ad.options.units = 0
         app.ad.update()
 
@@ -82,7 +83,7 @@ class Root(FloatLayout):
     # Move pen up/down
     def pen(self, coorner):
         app = App.get_running_app()
-
+        app.ad.connect()
         # min_height = app.ad.options.pen_pos_down
         # max_height = app.ad.options.pen_pos_up
         # app.ad.options.pen_pos_down = min_height
@@ -97,6 +98,7 @@ class Root(FloatLayout):
     # move pen relativelly
     def go(self, x, y):
         app = App.get_running_app()
+        app.ad.connect()
         app.ad.options.model = 2
         app.ad.options.units = 0
         app.ad.update()
