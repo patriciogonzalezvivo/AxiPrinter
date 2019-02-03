@@ -82,12 +82,12 @@ def AxiConnect():
 def AxiDisconnect(axi):
     axi.disconnect()
 
-    app = App.get_running_app()
+    # app = App.get_running_app()
     
     # app.head_pos[0] = axi.turtle_x
     # app.head_pos[1] = axi.turtle_y
 
-    app.root.ids['status_label'].text = 'x: {:.1f}mm'.format(app.head_pos[0]*INCH) + '   y: {:.1f}mm'.format(app.head_pos[1]*INCH)
+    # app.root.ids['status_label'].text = 'x: {:.1f}mm'.format(app.head_pos[0]*INCH) + '   y: {:.1f}mm'.format(app.head_pos[1]*INCH)
 
 
 class Root(FloatLayout):
@@ -166,10 +166,14 @@ class Root(FloatLayout):
         delta_y = -pos_y + target_y
 
         # axi.move(delta_x, delta_y)
-        axi.plotSegmentWithVelocity(delta_x, delta_y, 0, 0)
+        if axi.serial_port:
+            axi.plotSegmentWithVelocity(delta_x, delta_y, 0, 0)
 
         app.head_pos[0] = target_x
         app.head_pos[1] = target_y
+        app.root.ids['status_label'].text = 'x: {:.1f}mm'.format(app.head_pos[0]*INCH) + '   y: {:.1f}mm'.format(app.head_pos[1]*INCH)
+        app.root.ids['status_label'].text += '   dx: {:.1f}mm'.format(delta_x*INCH) + '   dy: {:.1f}mm'.format(delta_y*INCH)
+        
 
         AxiDisconnect(axi)
 
@@ -182,10 +186,15 @@ class Root(FloatLayout):
         
         axi = AxiConnect()
         # axi.move(x, y)
-        axi.plotSegmentWithVelocity(x, y, 0, 0)
+        if axi.serial_port:
+            axi.plotSegmentWithVelocity(x, y, 0, 0)
 
         app.head_pos[0] += x
         app.head_pos[1] += y
+
+        app.root.ids['status_label'].text = 'x: {:.1f}mm'.format(app.head_pos[0]*INCH) + '   y: {:.1f}mm'.format(app.head_pos[1]*INCH)
+        app.root.ids['status_label'].text += '   dx: {:.1f}mm'.format(x*INCH) + '   dy: {:.1f}mm'.format(y*INCH)
+       
         
         AxiDisconnect(axi)
 
