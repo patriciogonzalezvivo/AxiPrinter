@@ -123,43 +123,6 @@ class Root(FloatLayout):
 
         app.ad.disconnect()
 
-    # MOVE
-    #  go to absoluite coorners
-    def coorner(self, coorner):
-        x = 0.0
-        y = 0.0
-
-        pos_x = 0.0
-        pos_y = 0.0
-
-        # current position
-        app = App.get_running_app()
-        # pos_x = app.head_pos[0]
-        # pos_y = app.head_pos[1]
-
-        axi = AxiConnect()
-
-        if coorner == 0:
-            x = axi.x_bounds_min - pos_x
-            y = axi.y_bounds_min - pos_y
-        elif coorner == 1:
-            x = axi.x_bounds_max - pos_x
-            y = axi.y_bounds_min - pos_y
-        elif coorner == 2:
-            x = axi.x_bounds_min - pos_x
-            y = axi.y_bounds_max - pos_y
-        elif coorner == 3:
-            x = axi.x_bounds_max - pos_x
-            y = axi.y_bounds_max - pos_y
-
-        # axi.move(x, y)
-        axi.plotSegmentWithVelocity(x, y, 0, 0)
-
-        app.head_pos[0] = x
-        app.head_pos[1] = y
-
-        AxiDisconnect(axi)
-
     # Move pen up/down
     def pen(self, state):
         axi = AxiConnect()
@@ -171,22 +134,58 @@ class Root(FloatLayout):
 
         AxiDisconnect(axi)
 
-    # move pen relativelly
-    def move(self, x, y):
+    # MOVE
+    #  go to absoluite coorners
+    def coorner(self, coorner):
+        target_x = 0.0
+        target_y = 0.0
+        delta_x = 0.0
+        delta_y = 0.0
+
+        # current position
         app = App.get_running_app()
         pos_x = app.head_pos[0]
         pos_y = app.head_pos[1]
 
-        pos_x += x / INCH # to mm
-        pos_y += y / INCH # to mm
-        
         axi = AxiConnect()
 
-        # axi.move(x, y)
-        axi.plotSegmentWithVelocity(pos_x, pos_y, 0, 0)
+        if coorner == 0:
+            target_x = 0.0
+            target_y = 0.0
+        elif coorner == 1:
+            target_x = axi.x_bounds_max
+            target_y = 0.0;
+        elif coorner == 2:
+            target_x = 0.0
+            target_y = axi.y_bounds_max
+        elif coorner == 3:
+            target_x = axi.x_bounds_max
+            target_y = axi.y_bounds_max
 
-        app.head_pos[0] = pos_x
-        app.head_pos[1] = pos_y
+        delta_x = -pos_x + target_x
+        delta_y = -pos_y + target_y
+
+        # axi.move(delta_x, delta_y)
+        # axi.plotSegmentWithVelocity(delta_x, delta_y, 0, 0)
+
+        app.head_pos[0] = target_x
+        app.head_pos[1] = target_y
+
+        AxiDisconnect(axi)
+
+    # move pen relativelly
+    def move(self, x, y):
+        app = App.get_running_app()
+
+        x = x / INCH # to mm
+        y = y / INCH # to mm
+        
+        axi = AxiConnect()
+        # axi.move(x, y)
+        # axi.plotSegmentWithVelocity(x, y, 0, 0)
+
+        app.head_pos[0] += x
+        app.head_pos[1] += y
         
         AxiDisconnect(axi)
 
