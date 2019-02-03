@@ -129,11 +129,12 @@ class Root(FloatLayout):
         x = 0.0
         y = 0.0
 
-        axi = AxiConnect()
-
         # current position
-        pos_x = axi.turtle_x
-        pos_y = axi.turtle_y
+        app = App.get_running_app()
+        pos_x = app.head_pos[0]
+        pos_y = app.head_pos[1]
+
+        axi = AxiConnect()
 
         if coorner == 0:
             x = axi.x_bounds_min - pos_x
