@@ -71,6 +71,7 @@ def AxiConnect():
     app.ad.options.model = 2
     app.ad.options.pen_pos_down = min_height
     app.ad.options.pen_pos_up = max_height
+    app.ad.ignore_limits = True
     app.ad.update()
 
     # app.ad.turtle_x = app.head_pos[0]
