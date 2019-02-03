@@ -24,6 +24,8 @@ from kivy.uix.button import Button
 
 from pyaxidraw import axidraw
 
+INCH = 25.4
+
 class MySlider(Slider):
     def __init__(self, **kwargs):
         self.register_event_type('on_release')
@@ -57,6 +59,33 @@ class MyButton(Button):
 class LoadDialog(FloatLayout):
     load = ObjectProperty(None)
     cancel = ObjectProperty(None)
+
+def AxiConnect():
+    app = App.get_running_app()
+
+    min_height = app.ad.options.pen_pos_down
+    max_height = app.ad.options.pen_pos_up
+
+    app.ad.connect()
+    app.ad.options.units = 0
+    app.ad.options.model = 2
+    app.ad.options.pen_pos_down = min_height
+    app.ad.options.pen_pos_up = max_height
+    app.ad.update()
+
+    app.ad.turtle_x = app.head_pos[0]
+    app.ad.turtle_y = app.head_pos[1]
+
+    return app.ad
+
+
+def AxiDisconnect(axi):
+    axi.disconnect()
+
+    app = App.get_running_app()
+    app.head_pos[0] = axi.turtle_x
+    app.head_pos[1] = axi.turtle_y
+    app.root.ids['status_label'].text = 'x: {:.1f}mm'.format(app.head_pos[0]*INCH) + '   y: {:.1f}mm'.format(app.head_pos[1]*INCH)
 
 
 class Root(FloatLayout):
@@ -95,86 +124,40 @@ class Root(FloatLayout):
     # MOVE
     #  go to absoluite coorners
     def coorner(self, coorner):
-        app = App.get_running_app()
-        min_height = app.ad.options.pen_pos_down
-        max_height = app.ad.options.pen_pos_up
-        
-        app.ad.connect()
-        app.ad.options.units = 0
-        app.ad.options.model = 2
-        app.ad.options.pen_pos_down = min_height
-        app.ad.options.pen_pos_up = max_height
-        app.ad.update()
-
-        app.ad.f_curr_x = app.head_pos[0]
-        app.ad.f_curr_y = app.head_pos[1]
-        app.ad.turtle_x = app.ad.f_curr_x
-        app.ad.turtle_y = app.ad.f_curr_y
+        axi = AxiConnect()
 
         if coorner == 0:
-            app.ad.moveto(app.ad.x_bounds_min, app.ad.y_bounds_min)
+            axi.moveto(axi.x_bounds_min, axi.y_bounds_min)
         elif coorner == 1:
-            app.ad.moveto(app.ad.x_bounds_max, app.ad.y_bounds_min)
+            axi.moveto(axi.x_bounds_max, axi.y_bounds_min)
         elif coorner == 2:
-            app.ad.moveto(app.ad.x_bounds_min, app.ad.y_bounds_max)
+            axi.moveto(axi.x_bounds_min, axi.y_bounds_max)
         elif coorner == 3:
-            app.ad.moveto(app.ad.x_bounds_max, app.ad.y_bounds_max)
+            axi.moveto(axi.x_bounds_max, axi.y_bounds_max)
 
-        app.ad.disconnect()
-        app.head_pos[0] = app.ad.f_curr_x
-        app.head_pos[1] = app.ad.f_curr_y
-        app.root.ids['status_label'].text = 'x:' + str(app.head_pos[0]) + '  y:' + str(app.head_pos[1])
-
+        AxiDisconnect(axi)
 
     # Move pen up/down
     def pen(self, state):
-        app = App.get_running_app()
-        min_height = app.ad.options.pen_pos_down
-        max_height = app.ad.options.pen_pos_up
-
-        app.ad.connect()
-        app.ad.options.pen_pos_down = min_height
-        app.ad.options.pen_pos_up = max_height
-        app.ad.update()
-
-        app.ad.f_curr_x = app.head_pos[0]
-        app.ad.f_curr_y = app.head_pos[1]
-        app.ad.turtle_x = app.ad.f_curr_x
-        app.ad.turtle_y = app.ad.f_curr_y
+        axi = AxiConnect()
 
         if state == 0:
-            app.ad.penup()
+            axi.penup()
         elif state == 1:
-            app.ad.pendown()
+            axi.pendown()
 
-        app.ad.disconnect()
+        AxiDisconnect(axi)
 
     # move pen relativelly
     def move(self, x, y):
-        x = x / 25.4 # to mm
-        y = y / 25.4 # to mm
-        app = App.get_running_app()
-        min_height = app.ad.options.pen_pos_down
-        max_height = app.ad.options.pen_pos_up
+        x = x / INCH # to mm
+        y = y / INCH # to mm
+        
+        axi = AxiConnect()
 
-        app.ad.connect()
-        app.ad.options.units = 0
-        app.ad.options.model = 2
-        app.ad.options.pen_pos_down = min_height
-        app.ad.options.pen_pos_up = max_height
-        app.ad.update()
-
-        app.ad.f_curr_x = app.head_pos[0]
-        app.ad.f_curr_y = app.head_pos[1]
-        app.ad.turtle_x = app.ad.f_curr_x
-        app.ad.turtle_y = app.ad.f_curr_y
-
-        app.ad.move(x, y)
-
-        app.ad.disconnect()
-        app.head_pos[0] = app.ad.f_curr_x
-        app.head_pos[1] = app.ad.f_curr_y
-        app.root.ids['status_label'].text = 'x:' + str(app.head_pos[0]) + ',' + str(app.head_pos[1])
+        axi.move(x, y)
+        
+        AxiDisconnect(axi)
 
     # FILE
     def show_load(self):
@@ -187,6 +170,7 @@ class Root(FloatLayout):
     def load(self, filenames):
         app = App.get_running_app()
         app.filename = filenames[0]
+
         min_height = app.ad.options.pen_pos_down
         max_height = app.ad.options.pen_pos_up
 
@@ -216,8 +200,8 @@ class Root(FloatLayout):
         print('PLOT', app.filename)
 
         app.ad.effect( app.head_pos )
-        app.head_pos[0] = app.ad.f_curr_x
-        app.head_pos[1] = app.ad.f_curr_y
+        app.head_pos[0] = app.ad.svg_last_known_pos_x
+        app.head_pos[1] = app.ad.svg_last_known_pos_y
         app.root.ids['status_label'].text = 'x:' + str(app.head_pos[0]) + ',' + str(app.head_pos[1])
 
 class AxiPrinter(App):
