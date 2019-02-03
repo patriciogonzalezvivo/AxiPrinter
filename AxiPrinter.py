@@ -72,8 +72,10 @@ class Root(FloatLayout):
         app.ad.options.pen_pos_down = min_height
         app.ad.options.pen_pos_up = max_height
         app.ad.update()
+
         app.ad.penup()
         app.ad.pendown()
+
         app.ad.disconnect()
 
     def setPenUp(self, max_height):
@@ -84,13 +86,15 @@ class Root(FloatLayout):
         app.ad.options.pen_pos_down = min_height
         app.ad.options.pen_pos_up = max_height
         app.ad.update()
+        
         app.ad.pendown()
         app.ad.penup()
+
         app.ad.disconnect()
 
     # MOVE
     #  go to absoluite coorners
-    def goCoorner(self, coorner):
+    def coorner(self, coorner):
         app = App.get_running_app()
         min_height = app.ad.options.pen_pos_down
         max_height = app.ad.options.pen_pos_up
@@ -101,6 +105,11 @@ class Root(FloatLayout):
         app.ad.options.pen_pos_down = min_height
         app.ad.options.pen_pos_up = max_height
         app.ad.update()
+
+        app.ad.f_curr_x = app.head_pos[0]
+        app.ad.f_curr_y = app.head_pos[1]
+        app.ad.turtle_x = app.ad.f_curr_x
+        app.ad.turtle_y = app.ad.f_curr_y
 
         if coorner == 0:
             app.ad.moveto(app.ad.x_bounds_min, app.ad.y_bounds_min)
@@ -128,6 +137,11 @@ class Root(FloatLayout):
         app.ad.options.pen_pos_up = max_height
         app.ad.update()
 
+        app.ad.f_curr_x = app.head_pos[0]
+        app.ad.f_curr_y = app.head_pos[1]
+        app.ad.turtle_x = app.ad.f_curr_x
+        app.ad.turtle_y = app.ad.f_curr_y
+
         if state == 0:
             app.ad.penup()
         elif state == 1:
@@ -136,7 +150,9 @@ class Root(FloatLayout):
         app.ad.disconnect()
 
     # move pen relativelly
-    def go(self, x, y):
+    def move(self, x, y):
+        x = x / 25.4 # to mm
+        y = y / 25.4 # to mm
         app = App.get_running_app()
         min_height = app.ad.options.pen_pos_down
         max_height = app.ad.options.pen_pos_up
@@ -147,6 +163,11 @@ class Root(FloatLayout):
         app.ad.options.pen_pos_down = min_height
         app.ad.options.pen_pos_up = max_height
         app.ad.update()
+
+        app.ad.f_curr_x = app.head_pos[0]
+        app.ad.f_curr_y = app.head_pos[1]
+        app.ad.turtle_x = app.ad.f_curr_x
+        app.ad.turtle_y = app.ad.f_curr_y
 
         app.ad.move(x, y)
 

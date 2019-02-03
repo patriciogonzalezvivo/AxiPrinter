@@ -52,18 +52,18 @@ Root:
                             orientation: 'vertical'
                             Button:
                                 text: "0"
-                                on_release: root.goCoorner(0)
+                                on_release: root.coorner(0)
                             Button:
                                 text: "2"
-                                on_release: root.goCoorner(2)
+                                on_release: root.coorner(2)
                         BoxLayout:
                             orientation: 'vertical'
                             Button:
                                 text: "1"
-                                on_release: root.goCoorner(1)
+                                on_release: root.coorner(1)
                             Button:
                                 text: "3"
-                                on_release: root.goCoorner(3)
+                                on_release: root.coorner(3)
 
                 BoxLayout:
                     orientation: 'vertical'
@@ -88,18 +88,18 @@ Root:
                         orientation: 'vertical'
                         Button:
                             text: "Up"
-                            on_release: root.go(0.0, -1.0)
+                            on_release: root.move(0.0, -1.0)
                         BoxLayout:
                             orientation: 'horizontal'
                             Button:
                                 text: "Left"
-                                on_release: root.go(-1.0, 0.0)
+                                on_release: root.move(-1.0, 0.0)
                             Button:
                                 text: "Right"
-                                on_release: root.go(1.0, 0.0)
+                                on_release: root.move(1.0, 0.0)
                         Button:
                             text: "Down"
-                            on_release: root.go(0.0, 0.0)
+                            on_release: root.move(0.0, 1.0)
             Label:
                 id: status_label
                 text: ''
@@ -115,11 +115,11 @@ Root:
                 text: 'Choose...'
                 on_release: root.show_load()
 
-            MyButton:
-                id: flyover_button
-                text: 'FlyOver B-Box'
-                enabled: False
-                on_release: root.flyover()
+            # MyButton:
+            #     id: flyover_button
+            #     text: 'FlyOver B-Box'
+            #     enabled: False
+            #     on_release: root.flyover()
 
             MyButton:
                 id: plot_button
