@@ -83,8 +83,10 @@ def AxiDisconnect(axi):
     axi.disconnect()
 
     app = App.get_running_app()
+    
     app.head_pos[0] = axi.turtle_x
     app.head_pos[1] = axi.turtle_y
+
     app.root.ids['status_label'].text = 'x: {:.1f}mm'.format(app.head_pos[0]*INCH) + '   y: {:.1f}mm'.format(app.head_pos[1]*INCH)
 
 
@@ -124,16 +126,29 @@ class Root(FloatLayout):
     # MOVE
     #  go to absoluite coorners
     def coorner(self, coorner):
+        x = 0.0
+        y = 0.0
+
         axi = AxiConnect()
 
+        # current position
+        pos_x = axi.turtle_x
+        pos_y = axi.turtle_y
+
         if coorner == 0:
-            axi.moveto(axi.x_bounds_min, axi.y_bounds_min)
+            x = axi.x_bounds_min - pos_x
+            y = axi.y_bounds_min - pos_y
         elif coorner == 1:
-            axi.moveto(axi.x_bounds_max, axi.y_bounds_min)
+            x = axi.x_bounds_max - pos_x
+            y = axi.y_bounds_min - pos_y
         elif coorner == 2:
-            axi.moveto(axi.x_bounds_min, axi.y_bounds_max)
+            x = axi.x_bounds_min - pos_x
+            y = axi.y_bounds_max - pos_y
         elif coorner == 3:
-            axi.moveto(axi.x_bounds_max, axi.y_bounds_max)
+            x = axi.x_bounds_max - pos_x
+            y = axi.y_bounds_max - pos_y
+
+        axi.move(x, y)
 
         AxiDisconnect(axi)
 
@@ -186,7 +201,7 @@ class Root(FloatLayout):
         # writeFile.write( app.ad.plot_run( output=True ) )
         # writeFile.close()
 
-        app.root.ids['flyover_button'].enabled = True
+        # app.root.ids['flyover_button'].enabled = True
         app.root.ids['plot_button'].enabled = True
 
         self.dismiss_popup()
