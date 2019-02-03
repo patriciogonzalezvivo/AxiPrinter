@@ -166,7 +166,7 @@ class Root(FloatLayout):
         delta_y = -pos_y + target_y
 
         # axi.move(delta_x, delta_y)
-        # axi.plotSegmentWithVelocity(delta_x, delta_y, 0, 0)
+        axi.plotSegmentWithVelocity(delta_x, delta_y, 0, 0)
 
         app.head_pos[0] = target_x
         app.head_pos[1] = target_y
@@ -182,7 +182,7 @@ class Root(FloatLayout):
         
         axi = AxiConnect()
         # axi.move(x, y)
-        # axi.plotSegmentWithVelocity(x, y, 0, 0)
+        axi.plotSegmentWithVelocity(x, y, 0, 0)
 
         app.head_pos[0] += x
         app.head_pos[1] += y
