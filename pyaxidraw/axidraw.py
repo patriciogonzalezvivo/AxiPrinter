@@ -3284,14 +3284,13 @@ class AxiDraw(inkex.Effect):
         if relative:
             x_value = self.turtle_x + x_value
             y_value = self.turtle_y + y_value
-        segment =  [[self.turtle_x, self.turtle_y],
-                    [x_value,y_value]] 
+
+        segment =  [[self.turtle_x, self.turtle_y], [x_value,y_value]] 
         accept, seg = plot_utils.clip_segment(segment, self.bounds)
-        
         if accept: # If some part of the segment is within bounds
             if self.serial_port:
                 self.plotSegmentWithVelocity(seg[1][0], seg[1][1], 0, 0)
-
+                
         self.turtle_x = x_value
         self.turtle_y = y_value
 

@@ -73,8 +73,8 @@ def AxiConnect():
     app.ad.options.pen_pos_up = max_height
     app.ad.update()
 
-    app.ad.turtle_x = app.head_pos[0]
-    app.ad.turtle_y = app.head_pos[1]
+    # app.ad.turtle_x = app.head_pos[0]
+    # app.ad.turtle_y = app.head_pos[1]
 
     return app.ad
 
@@ -84,8 +84,8 @@ def AxiDisconnect(axi):
 
     app = App.get_running_app()
     
-    app.head_pos[0] = axi.turtle_x
-    app.head_pos[1] = axi.turtle_y
+    # app.head_pos[0] = axi.turtle_x
+    # app.head_pos[1] = axi.turtle_y
 
     app.root.ids['status_label'].text = 'x: {:.1f}mm'.format(app.head_pos[0]*INCH) + '   y: {:.1f}mm'.format(app.head_pos[1]*INCH)
 
@@ -129,10 +129,13 @@ class Root(FloatLayout):
         x = 0.0
         y = 0.0
 
+        pos_x = 0.0
+        pos_y = 0.0
+
         # current position
         app = App.get_running_app()
-        pos_x = app.head_pos[0]
-        pos_y = app.head_pos[1]
+        # pos_x = app.head_pos[0]
+        # pos_y = app.head_pos[1]
 
         axi = AxiConnect()
 
@@ -149,7 +152,11 @@ class Root(FloatLayout):
             x = axi.x_bounds_max - pos_x
             y = axi.y_bounds_max - pos_y
 
-        axi.move(x, y)
+        # axi.move(x, y)
+        # axi.plotSegmentWithVelocity(x, y, 0, 0)
+
+        app.head_pos[0] = x
+        app.head_pos[1] = y
 
         AxiDisconnect(axi)
 
@@ -166,12 +173,20 @@ class Root(FloatLayout):
 
     # move pen relativelly
     def move(self, x, y):
-        x = x / INCH # to mm
-        y = y / INCH # to mm
+        app = App.get_running_app()
+        pos_x = app.head_pos[0]
+        pos_y = app.head_pos[1]
+
+        pos_x += x / INCH # to mm
+        pos_y += y / INCH # to mm
         
         axi = AxiConnect()
 
-        axi.move(x, y)
+        # axi.move(x, y)
+        # axi.plotSegmentWithVelocity(pos_x, pos_y, 0, 0)
+
+        app.head_pos[0] = pos_x
+        app.head_pos[1] = pos_y
         
         AxiDisconnect(axi)
 
