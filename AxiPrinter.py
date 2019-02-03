@@ -164,8 +164,8 @@ class Root(FloatLayout):
         
 
     def load(self, filenames):
-        app.filename = filenames[0]
         app = App.get_running_app()
+        app.filename = filenames[0]
         min_height = app.ad.options.pen_pos_down
         max_height = app.ad.options.pen_pos_up
 

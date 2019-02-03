@@ -8,7 +8,7 @@ Root:
                 orientation: 'vertical'
                 Label:
                     text: 'Pen Down'
-                    size_hint: (None, None)
+                    size_hint: (None, 0.1)
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 MySlider:
                     id: pen_down_slider
@@ -22,7 +22,7 @@ Root:
                 orientation: 'vertical'
                 Label:
                     text: 'Pen Up'
-                    size_hint: (None, None)
+                    size_hint: (None, 0.1)
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 MySlider:
                     id: pen_up_slider
@@ -44,8 +44,8 @@ Root:
                     orientation: 'vertical'
                     Label:
                         text: 'Coorners'
-                        size_hint: (None, None)
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        #size_hint: (None, None)
+                        #pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                     BoxLayout:
                         orientation: 'horizontal'
                         BoxLayout:
@@ -69,8 +69,8 @@ Root:
                     orientation: 'vertical'
                     Label:
                         text: 'Pen'
-                        size_hint: (None, None)
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        #size_hint: (None, None)
+                        #pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                     Button:
                         text: "Lift"
                         on_release: root.pen(0)
@@ -82,8 +82,8 @@ Root:
                     orientation: 'vertical'
                     Label:
                         text: 'Move'
-                        size_hint: (None, None)
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        #size_hint: (None, None)
+                        #pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                     BoxLayout:
                         orientation: 'vertical'
                         Button:
@@ -103,7 +103,7 @@ Root:
             Label:
                 id: status_label
                 text: ''
-                size_hint: (None, 1)
+                size_hint: (None, 0.25)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
             Label:
