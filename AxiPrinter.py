@@ -195,6 +195,9 @@ class Root(FloatLayout):
         print('PLOT', app.filename)
 
         app.ad.effect( app.head_pos )
+        app.head_pos[0] = app.ad.f_curr_x
+        app.head_pos[1] = app.ad.f_curr_y
+        app.root.ids['status_label'].text = 'x:' + str(app.head_pos[0]) + ',' + str(app.head_pos[1])
 
 class AxiPrinter(App):
     ad = axidraw.AxiDraw() 
