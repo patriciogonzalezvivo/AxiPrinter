@@ -279,7 +279,7 @@ class AxiDraw(inkex.Effect):
         self.options.accel =   plot_utils.constrainLimits(self.options.accel, 1, 110)    # Prevent zero speed
         
 
-    def effect(self):
+    def effect(self, offset=(0.0, 0.0)):
         """Main entry point: check to see which mode/tab is selected, and act accordingly."""
 
         self.start_time = time.time()
@@ -298,8 +298,8 @@ class AxiDraw(inkex.Effect):
 
         f_x = None
         f_y = None
-        self.f_curr_x = axidraw_conf.StartPosX
-        self.f_curr_y = axidraw_conf.StartPosY
+        self.f_curr_x = axidraw_conf.StartPosX + offset[0]
+        self.f_curr_y = axidraw_conf.StartPosY + offset[1]
         self.pt_first = (axidraw_conf.StartPosX, axidraw_conf.StartPosY)
         self.f_speed = 1
         self.node_target = int(0)
@@ -3284,7 +3284,7 @@ class AxiDraw(inkex.Effect):
         if relative:
             x_value = self.turtle_x + x_value
             y_value = self.turtle_y + y_value
-        segment =  [[self.turtle_x,self.turtle_y],
+        segment =  [[self.turtle_x, self.turtle_y],
                     [x_value,y_value]] 
         accept, seg = plot_utils.clip_segment(segment, self.bounds)
         

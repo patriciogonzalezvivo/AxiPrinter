@@ -63,46 +63,97 @@ class Root(FloatLayout):
     def dismiss_popup(self):
         self._popup.dismiss()
 
+    # SET
+    def setPenDown(self, min_height):
+        app = App.get_running_app()
+        max_height = app.ad.options.pen_pos_up
+
+        app.ad.connect()
+        app.ad.options.pen_pos_down = min_height
+        app.ad.options.pen_pos_up = max_height
+        app.ad.update()
+        app.ad.penup()
+        app.ad.pendown()
+        app.ad.disconnect()
+
+    def setPenUp(self, max_height):
+        app = App.get_running_app()
+        min_height = app.ad.options.pen_pos_down
+
+        app.ad.connect()
+        app.ad.options.pen_pos_down = min_height
+        app.ad.options.pen_pos_up = max_height
+        app.ad.update()
+        app.ad.pendown()
+        app.ad.penup()
+        app.ad.disconnect()
+
     # MOVE
     #  go to absoluite coorners
     def goCoorner(self, coorner):
         app = App.get_running_app()
+        min_height = app.ad.options.pen_pos_down
+        max_height = app.ad.options.pen_pos_up
+        
         app.ad.connect()
         app.ad.options.units = 0
+        app.ad.options.model = 2
+        app.ad.options.pen_pos_down = min_height
+        app.ad.options.pen_pos_up = max_height
         app.ad.update()
 
         if coorner == 0:
-            app.ad.goto(app.ad.x_bounds_min, app.ad.y_bounds_min)
+            app.ad.moveto(app.ad.x_bounds_min, app.ad.y_bounds_min)
         elif coorner == 1:
-            app.ad.goto(app.ad.x_bounds_max, app.ad.y_bounds_min)
+            app.ad.moveto(app.ad.x_bounds_max, app.ad.y_bounds_min)
         elif coorner == 2:
-            app.ad.goto(app.ad.x_bounds_min, app.ad.y_bounds_max)
+            app.ad.moveto(app.ad.x_bounds_min, app.ad.y_bounds_max)
         elif coorner == 3:
-            app.d.goto(app.ad.x_bounds_max, app.ad.y_bounds_max)
+            app.ad.moveto(app.ad.x_bounds_max, app.ad.y_bounds_max)
+
+        app.ad.disconnect()
+        app.head_pos[0] = app.ad.f_curr_x
+        app.head_pos[1] = app.ad.f_curr_y
+        app.root.ids['status_label'].text = 'x:' + str(app.head_pos[0]) + '  y:' + str(app.head_pos[1])
+
 
     # Move pen up/down
-    def pen(self, coorner):
+    def pen(self, state):
         app = App.get_running_app()
+        min_height = app.ad.options.pen_pos_down
+        max_height = app.ad.options.pen_pos_up
+
         app.ad.connect()
-        # min_height = app.ad.options.pen_pos_down
-        # max_height = app.ad.options.pen_pos_up
-        # app.ad.options.pen_pos_down = min_height
-        # app.ad.options.pen_pos_up = max_height
+        app.ad.options.pen_pos_down = min_height
+        app.ad.options.pen_pos_up = max_height
         app.ad.update()
 
-        if coorner == 0:
+        if state == 0:
             app.ad.penup()
-        elif coorner == 1:
+        elif state == 1:
             app.ad.pendown()
+
+        app.ad.disconnect()
 
     # move pen relativelly
     def go(self, x, y):
         app = App.get_running_app()
+        min_height = app.ad.options.pen_pos_down
+        max_height = app.ad.options.pen_pos_up
+
         app.ad.connect()
-        app.ad.options.model = 2
         app.ad.options.units = 0
+        app.ad.options.model = 2
+        app.ad.options.pen_pos_down = min_height
+        app.ad.options.pen_pos_up = max_height
         app.ad.update()
+
         app.ad.move(x, y)
+
+        app.ad.disconnect()
+        app.head_pos[0] = app.ad.f_curr_x
+        app.head_pos[1] = app.ad.f_curr_y
+        app.root.ids['status_label'].text = 'x:' + str(app.head_pos[0]) + ',' + str(app.head_pos[1])
 
     # FILE
     def show_load(self):
@@ -113,9 +164,8 @@ class Root(FloatLayout):
         
 
     def load(self, filenames):
+        app.filename = filenames[0]
         app = App.get_running_app()
-        print('Loading', app.filename)
-
         min_height = app.ad.options.pen_pos_down
         max_height = app.ad.options.pen_pos_up
 
@@ -131,7 +181,6 @@ class Root(FloatLayout):
         # writeFile.write( app.ad.plot_run( output=True ) )
         # writeFile.close()
 
-        print(app.root.ids)
         app.root.ids['flyover_button'].enabled = True
         app.root.ids['plot_button'].enabled = True
 
@@ -144,14 +193,21 @@ class Root(FloatLayout):
     def plot(self):
         app = App.get_running_app()
         print('PLOT', app.filename)
-        app.ad.plot_run()
+
+        app.ad.effect( app.head_pos )
 
 class AxiPrinter(App):
     ad = axidraw.AxiDraw() 
     filename = "None"
+    head_pos = [0.0, 0.0]
 
     def build(self):
         self.ad.interactive()
+        self.head_pos = [0.0, 0.0]
+        self.ad.turtle_x = 0.0
+        self.ad.turtle_y = 0.0
+        self.ad.f_curr_x = 0.0
+        self.ad.f_curr_y = 0.0
         return Builder.load_file('AxiPrinter.kv') 
 
 

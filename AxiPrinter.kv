@@ -16,15 +16,8 @@ Root:
                     max: 100
                     value: 30
                     orientation: 'vertical'
-                    on_release:
-                        app.ad.connect()
-                        app.ad.options.pen_pos_down = pen_down_slider.value 
-                        app.ad.update()
-                        app.ad.penup()
-                        app.ad.pendown()
-                        app.ad.disconnect()
-                        print("Down/Up pen position", app.ad.options.pen_pos_down, app.ad.options.pen_pos_up)
-
+                    on_release: root.setPenDown(pen_down_slider.value)
+                        
             BoxLayout:
                 orientation: 'vertical'
                 Label:
@@ -37,19 +30,11 @@ Root:
                     max: 100
                     value: 60
                     orientation: 'vertical'
-                    on_release:
-                        app.ad.connect()
-                        app.ad.options.pen_pos_up = pen_up_slider.value
-                        app.ad.update()
-                        app.ad.pendown()
-                        app.ad.penup()
-                        app.ad.disconnect()
-                        print("Up pen position", app.ad.options.pen_pos_down, app.ad.options.pen_pos_up)
+                    on_release: root.setPenUp(pen_up_slider.value)
 
         BoxLayout:
             orientation: 'vertical'
             size_hint_x: dp(2)
-
 
             BoxLayout:
                 orientation: 'horizontal'
@@ -115,7 +100,11 @@ Root:
                         Button:
                             text: "Down"
                             on_release: root.go(0.0, 0.0)
-
+            Label:
+                id: status_label
+                text: ''
+                size_hint: (None, 1)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
             Label:
                 text: 'FILE'
