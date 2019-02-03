@@ -51,27 +51,74 @@ Root:
             size_hint_x: dp(2)
 
             Label:
-                text: 'Print Area Coorners'
+                text: 'MOVE'
                 size_hint: (None, None)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
             BoxLayout:
                 orientation: 'horizontal'
+
                 BoxLayout:
                     orientation: 'vertical'
-                    Button:
-                        text: "0"
-                        on_release: root.goCoorner(0)
-                    Button:
-                        text: "2"
-                        on_release: root.goCoorner(2)
+                    Label:
+                        text: 'to coorners'
+                        size_hint: (None, None)
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        BoxLayout:
+                            orientation: 'vertical'
+                            Button:
+                                text: "0"
+                                on_release: root.goCoorner(0)
+                            Button:
+                                text: "2"
+                                on_release: root.goCoorner(2)
+                        BoxLayout:
+                            orientation: 'vertical'
+                            Button:
+                                text: "1"
+                                on_release: root.goCoorner(1)
+                            Button:
+                                text: "3"
+                                on_release: root.goCoorner(3)
+
                 BoxLayout:
                     orientation: 'vertical'
+                    Label:
+                        text: 'Pen'
+                        size_hint: (None, None)
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                     Button:
-                        text: "1"
-                        on_release: root.goCoorner(1)
+                        text: "Lift"
+                        on_release: root.pen(0)
                     Button:
-                        text: "3"
-                        on_release: root.goCoorner(3)
+                        text: "Drop"
+                        on_release: root.pen(1)
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    Label:
+                        text: 'Move'
+                        size_hint: (None, None)
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    BoxLayout:
+                        orientation: 'vertical'
+                        Button:
+                            text: "Up"
+                            on_release: root.go(0.0, -1.0)
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            Button:
+                                text: "Left"
+                                on_release: root.go(-1.0, 0.0)
+                            Button:
+                                text: "Right"
+                                on_release: root.go(1.0, 0.0)
+                        Button:
+                            text: "Down"
+                            on_release: root.go(0.0, 0.0)
+
 
             Label:
                 text: 'FILE'

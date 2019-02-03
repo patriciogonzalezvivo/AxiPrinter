@@ -63,19 +63,12 @@ class Root(FloatLayout):
     def dismiss_popup(self):
         self._popup.dismiss()
 
-    # CALIBRATION
+    # MOVE
+    #  go to absoluite coorners
     def goCoorner(self, coorner):
         app = App.get_running_app()
-
-        min_height = app.ad.options.pen_pos_down
-        max_height = app.ad.options.pen_pos_up
-
-        app.ad.options.model = 2
         app.ad.options.units = 0
-        app.ad.options.pen_pos_down = min_height
-        app.ad.options.pen_pos_up = max_height
         app.ad.update()
-        app.ad.penup()
 
         if coorner == 0:
             app.ad.goto(app.ad.x_bounds_min, app.ad.y_bounds_min)
@@ -86,7 +79,28 @@ class Root(FloatLayout):
         elif coorner == 3:
             app.d.goto(app.ad.x_bounds_max, app.ad.y_bounds_max)
 
-        app.ad.pendown()
+    # Move pen up/down
+    def pen(self, coorner):
+        app = App.get_running_app()
+
+        # min_height = app.ad.options.pen_pos_down
+        # max_height = app.ad.options.pen_pos_up
+        # app.ad.options.pen_pos_down = min_height
+        # app.ad.options.pen_pos_up = max_height
+        app.ad.update()
+
+        if coorner == 0:
+            app.ad.penup()
+        elif coorner == 1:
+            app.ad.pendown()
+
+    # move pen relativelly
+    def go(self, x, y):
+        app = App.get_running_app()
+        app.ad.options.model = 2
+        app.ad.options.units = 0
+        app.ad.update()
+        app.ad.move(x, y)
 
     # FILE
     def show_load(self):
@@ -115,7 +129,6 @@ class Root(FloatLayout):
         # writeFile.write( app.ad.plot_run( output=True ) )
         # writeFile.close()
 
-        # buttons = MyButton()
         print(app.root.ids)
         app.root.ids['flyover_button'].enabled = True
         app.root.ids['plot_button'].enabled = True
