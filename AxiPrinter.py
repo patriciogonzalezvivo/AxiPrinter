@@ -74,21 +74,12 @@ def AxiConnect():
     app.ad.ignore_limits = True
     app.ad.update()
 
-    # app.ad.turtle_x = app.head_pos[0]
-    # app.ad.turtle_y = app.head_pos[1]
 
     return app.ad
 
 
 def AxiDisconnect(axi):
     axi.disconnect()
-
-    # app = App.get_running_app()
-    
-    # app.head_pos[0] = axi.turtle_x
-    # app.head_pos[1] = axi.turtle_y
-
-    # app.root.ids['status_label'].text = 'x: {:.1f}mm'.format(app.head_pos[0]*INCH) + '   y: {:.1f}mm'.format(app.head_pos[1]*INCH)
 
 
 class Root(FloatLayout):
@@ -173,8 +164,6 @@ class Root(FloatLayout):
         app.head_pos[0] = target_x
         app.head_pos[1] = target_y
         app.root.ids['status_label'].text = 'x: {:.1f}mm'.format(app.head_pos[0]*INCH) + '   y: {:.1f}mm'.format(app.head_pos[1]*INCH)
-        app.root.ids['status_label'].text += '   dx: {:.1f}mm'.format(delta_x*INCH) + '   dy: {:.1f}mm'.format(delta_y*INCH)
-        
 
         AxiDisconnect(axi)
 
@@ -194,9 +183,6 @@ class Root(FloatLayout):
         app.head_pos[1] += y
 
         app.root.ids['status_label'].text = 'x: {:.1f}mm'.format(app.head_pos[0]*INCH) + '   y: {:.1f}mm'.format(app.head_pos[1]*INCH)
-        app.root.ids['status_label'].text += '   dx: {:.1f}mm'.format(x*INCH) + '   dy: {:.1f}mm'.format(y*INCH)
-       
-        
         AxiDisconnect(axi)
 
     # FILE
@@ -242,7 +228,8 @@ class Root(FloatLayout):
         app.ad.effect( app.head_pos )
         app.head_pos[0] = app.ad.svg_last_known_pos_x
         app.head_pos[1] = app.ad.svg_last_known_pos_y
-        app.root.ids['status_label'].text = 'x:' + str(app.head_pos[0]) + ',' + str(app.head_pos[1])
+        app.root.ids['status_label'].text = 'x: {:.1f}mm'.format(app.head_pos[0]*INCH) + '   y: {:.1f}mm'.format(app.head_pos[1]*INCH)
+
 
 class AxiPrinter(App):
     ad = axidraw.AxiDraw() 
